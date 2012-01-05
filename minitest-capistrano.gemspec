@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/minitest-capistrano/version', __FILE__)
+require File.expand_path('../lib/minitest/capistrano', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Fletcher Nichol"]
@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.name          = "minitest-capistrano"
   gem.require_paths = ["lib"]
-  gem.version       = Minitest::Capistrano::VERSION
+  gem.version       = MiniTest::Capistrano::VERSION
 
   gem.add_dependency "minitest", "~> 2.10.0"
   gem.add_dependency "capistrano", "~> 2.9"
