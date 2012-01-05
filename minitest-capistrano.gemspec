@@ -4,8 +4,8 @@ require File.expand_path('../lib/minitest-capistrano/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Fletcher Nichol"]
   gem.email         = ["fnichol@nichol.ca"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{MiniTest assertions and expectations for testing Capistrano recipes}
+  gem.summary       = %q{MiniTest assertions and expectations for testing Capistrano recipes}
   gem.homepage      = ""
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
