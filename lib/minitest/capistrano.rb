@@ -1,9 +1,5 @@
 require 'minitest/spec'
 
-module MiniTest::Capistrano
-  VERSION = "0.0.1" # :nodoc:
-end
-
 module MiniTest
   ##
   # MiniTest Assertions.  All assertion methods accept a +msg+ which is
