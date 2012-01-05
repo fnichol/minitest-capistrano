@@ -1,4 +1,4 @@
-# Minitest::Capistrano
+# Minitest::Capistrano [![Build Status](https://secure.travis-ci.org/fnichol/minitest-capistrano.png)](http://travis-ci.org/fnichol/minitest-capistrano)
 
 TODO: Write a gem description
 
