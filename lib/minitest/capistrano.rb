@@ -78,6 +78,19 @@ module MiniTest
       def uploads
         @uploads ||= {}
       end
+
+      def capture(command, options={})
+        captures[command] = {:options => options}
+        captures_responses[command]
+      end
+
+      def captures
+        @captures ||= {}
+      end
+
+      def captures_responses
+        @captures_responses ||= {}
+      end
     end
   end
 end

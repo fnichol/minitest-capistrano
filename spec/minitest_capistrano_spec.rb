@@ -46,6 +46,29 @@ describe MiniTest::Capistrano::ConfigurationExtension do
       @config.uploads["path_to"].wont_be_nil
     end
   end
+
+  describe "#capture" do
+    it "starts with an empty hash" do
+      @config.captures.must_be_empty
+    end
+
+    it "adds an entry to the hash when called" do
+      @config.captures.must_be_empty
+      @config.capture "cat /tmp/secrets.txt"
+      @config.captures.wont_be_empty
+      @config.captures["cat /tmp/secrets.txt"].wont_be_nil
+    end
+
+    it "retuns a nil response if one is not pre-set" do
+      @config.capture("cat /nope").must_be_nil
+    end
+
+    it "returns a response if one is pre-set" do
+      @config.captures_responses["cat /tmp/file"] = "blah bleh"
+
+      @config.capture("cat /tmp/file").must_equal "blah bleh"
+    end
+  end
 end
 
 describe MiniTest::Assertions do
