@@ -88,6 +88,15 @@ describe MiniTest::Assertions do
     @config.run "nothing"
     subject.refute_have_run "yoyodyne", @config
   end
+
+  it "asserts any command has run" do
+    @config.run "yo"
+    subject.assert_have_run_something @config
+  end
+
+  it "refute any command has run" do
+    subject.refute_have_run_something @config
+  end
 end
 
 describe MiniTest::Expectations do
@@ -104,5 +113,14 @@ describe MiniTest::Expectations do
   it "needs to verify a command has not been run" do
     @config.run "wot?"
     @config.wont_have_run "yabba dabba"
+  end
+
+  it "needs to verify something has run" do
+    @config.run "woah"
+    @config.must_have_run_something
+  end
+
+  it "needs to verify no command has been run" do
+    @config.wont_have_run_anything
   end
 end

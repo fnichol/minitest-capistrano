@@ -23,6 +23,26 @@ module MiniTest
       msg = message(msg) { "Expected configuration to not run #{cmd}, but did" }
       assert_nil configuration.runs[cmd], msg
     end
+
+    ##
+    # Fails unless +configuration+ has not run anything.
+    #
+    #   assert_have_run_something configuration
+
+    def assert_have_run_something(configuration, msg = nil)
+      msg = message(msg) { "Expected configuration to have run something, but did not" }
+      refute_empty configuration.runs, msg
+    end
+
+    ##
+    # Fails if +configuration+ has run any commands
+    #
+    #   refute_have_run_something configuration
+
+    def refute_have_run_something(configuration, msg = nil)
+      msg = message(msg) { "Expected configuration to have run nothing, but did" }
+      assert_empty configuration.runs, msg
+    end
   end
 
   ##
@@ -46,6 +66,24 @@ module MiniTest
     # :method: wont_have_run
 
     infect_an_assertion :refute_have_run, :wont_have_run
+
+    ##
+    # See MiniTest::Assertions#assert_have_run_something
+    #
+    #   config.must_have_run_something
+    #
+    # :method: must_have_run_something
+
+    infect_an_assertion :assert_have_run_something, :must_have_run_something, true
+
+    ##
+    # See MiniTest::Assertions#refute_have_run_something
+    #
+    #    config.wont_have_run_anything
+    #
+    # :method: wont_have_run_anything
+
+    infect_an_assertion :refute_have_run_something, :wont_have_run_anything, true
   end
 
   module Capistrano
