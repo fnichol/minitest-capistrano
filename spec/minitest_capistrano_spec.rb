@@ -1,6 +1,7 @@
 gem 'minitest'
 require 'minitest/autorun'
 require 'minitest/capistrano'
+require 'capistrano'
 
 describe MiniTest::Capistrano::ConfigurationExtension do
   before do
@@ -69,6 +70,26 @@ describe MiniTest::Capistrano::ConfigurationExtension do
       @config.capture("cat /tmp/file").must_equal "blah bleh"
     end
   end
+
+  describe "#find_callback" do
+    before do
+      @config = Capistrano::Configuration.new
+      @config.extend(MiniTest::Capistrano::ConfigurationExtension)
+      @config.task(:startup)          { run "rails server" }
+      @config.task(:announce_startup) { run "echo starting up"}
+    end
+
+    it "returns an empty array when no callbacks are found" do
+      @config.find_callback(:before, @config.find_task("startup")).must_equal []
+    end
+
+    it "returns an array of callbacks that apply to the task" do
+      @config.before :startup, :announce_startup
+
+      @config.find_callback(:before, @config.find_task("startup")).
+        first.source.must_equal :announce_startup
+    end
+  end
 end
 
 describe MiniTest::Assertions do
@@ -97,6 +118,35 @@ describe MiniTest::Assertions do
   it "refute any command has run" do
     subject.refute_have_run_something @config
   end
+
+  describe "callbacks" do
+    before do
+      @config = Capistrano::Configuration.new
+      @config.extend(MiniTest::Capistrano::ConfigurationExtension)
+      @config.task(:startup)          { run "rails server" }
+      @config.task(:announce_startup) { run "echo starting up"}
+    end
+
+    it "asserts a callback exists for one task before another" do
+      @config.before :startup, :announce_startup
+
+      subject.assert_callback_before @config, :startup, :announce_startup
+    end
+
+    it "refutes a callback exists for one task before another" do
+      subject.refute_callback_before @config, :startup, :nadda
+    end
+
+    it "asserts a callback exists for one task after another" do
+      @config.after :start, :intialize
+
+      subject.assert_callback_after @config, :start, :intialize
+    end
+
+    it "refutes a callback exists for one task after another" do
+      subject.refute_callback_after @config, :clone, :nadda
+    end
+  end
 end
 
 describe MiniTest::Expectations do
@@ -122,5 +172,34 @@ describe MiniTest::Expectations do
 
   it "needs to verify no command has been run" do
     @config.wont_have_run_anything
+  end
+
+  describe "callbacks" do
+    before do
+      @config = Capistrano::Configuration.new
+      @config.extend(MiniTest::Capistrano::ConfigurationExtension)
+      @config.task(:startup)          { run "rails server" }
+      @config.task(:announce_startup) { run "echo starting up"}
+    end
+
+    it "needs to verify a callback exists for a task before another" do
+      @config.before :stop, :warn_people
+
+      @config.must_have_callback_before :stop, :warn_people
+    end
+
+    it "needs to verify no callback exists for a task before another" do
+      @config.wont_have_callback_before :reload, :stop
+    end
+
+    it "needs to verify a callback exists for a task after another" do
+      @config.after :start, :init_database
+
+      @config.must_have_callback_after :start, :init_database
+    end
+
+    it "needs to verify no callback exists for a task after another" do
+      @config.wont_have_callback_after :stop, :do_taxes
+    end
   end
 end
