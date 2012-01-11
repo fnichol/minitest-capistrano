@@ -88,6 +88,26 @@ module MiniTest
       test_callback_on(false, configuration, task_name, :after, after_task_name, msg)
     end
 
+    ##
+    # Fails unless +configuration+ has a task called +task_name+.
+    #
+    #   assert_have_task "deploy:restart", configuration
+
+    def assert_have_task(task_name, configuration, msg = nil)
+      msg ||= "Expected configuration to have task #{task_name} but did not"
+      refute_nil configuration.find_task(task_name), msg
+    end
+
+    ##
+    # Fails if +configuration+ has a task called +task_name+.
+    #
+    #   refute_have_task "deploy:nothing", configuration
+
+    def refute_have_task(task_name, configuration, msg = nil)
+      msg ||= "Expected configuration to not have task #{task_name} but did"
+      assert_nil configuration.find_task(task_name), msg
+    end
+
     private
 
     def test_callback_on(positive, configuration, task_name, on, other_task_name, msg)
@@ -178,6 +198,24 @@ module MiniTest
     # :method: wont_have_callback_after
 
     infect_an_assertion :refute_callback_after, :wont_have_callback_after, true
+
+    ##
+    # See MiniTest::Assertions#assert_have_task
+    #
+    #   config.must_have_task "deploy:restart"
+    #
+    # :method: must_have_task
+
+    infect_an_assertion :assert_have_task, :must_have_task
+
+    ##
+    # See MiniTest::Assertions#refute_have_task
+    #
+    #   config.wont_have_task "nothing:here"
+    #
+    # :method: wont_have_task
+
+    infect_an_assertion :refute_have_task, :wont_have_task
   end
 
   module Capistrano

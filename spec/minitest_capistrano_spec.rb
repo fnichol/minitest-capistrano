@@ -5,8 +5,10 @@ require 'capistrano'
 
 describe MiniTest::Capistrano::ConfigurationExtension do
   before do
-    @config = Object.new
+    @config = Capistrano::Configuration.new
     @config.extend(MiniTest::Capistrano::ConfigurationExtension)
+    @config.task(:startup)          { run "rails server" }
+    @config.task(:announce_startup) { run "echo starting up"}
   end
 
   describe "#get" do
@@ -72,13 +74,6 @@ describe MiniTest::Capistrano::ConfigurationExtension do
   end
 
   describe "#find_callback" do
-    before do
-      @config = Capistrano::Configuration.new
-      @config.extend(MiniTest::Capistrano::ConfigurationExtension)
-      @config.task(:startup)          { run "rails server" }
-      @config.task(:announce_startup) { run "echo starting up"}
-    end
-
     it "returns an empty array when no callbacks are found" do
       @config.find_callback(:before, @config.find_task("startup")).must_equal []
     end
@@ -94,8 +89,10 @@ end
 
 describe MiniTest::Assertions do
   before do
-    @config = Object.new
+    @config = Capistrano::Configuration.new
     @config.extend(MiniTest::Capistrano::ConfigurationExtension)
+    @config.task(:startup)          { run "rails server" }
+    @config.task(:announce_startup) { run "echo starting up"}
   end
 
   subject { MiniTest::Unit::TestCase.new 'fake tc' }
@@ -119,40 +116,43 @@ describe MiniTest::Assertions do
     subject.refute_have_run_something @config
   end
 
-  describe "callbacks" do
-    before do
-      @config = Capistrano::Configuration.new
-      @config.extend(MiniTest::Capistrano::ConfigurationExtension)
-      @config.task(:startup)          { run "rails server" }
-      @config.task(:announce_startup) { run "echo starting up"}
-    end
+  it "asserts a callback exists for one task before another" do
+    @config.before :startup, :announce_startup
 
-    it "asserts a callback exists for one task before another" do
-      @config.before :startup, :announce_startup
+    subject.assert_callback_before @config, :startup, :announce_startup
+  end
 
-      subject.assert_callback_before @config, :startup, :announce_startup
-    end
+  it "refutes a callback exists for one task before another" do
+    subject.refute_callback_before @config, :startup, :nadda
+  end
 
-    it "refutes a callback exists for one task before another" do
-      subject.refute_callback_before @config, :startup, :nadda
-    end
+  it "asserts a callback exists for one task after another" do
+    @config.after :start, :intialize
 
-    it "asserts a callback exists for one task after another" do
-      @config.after :start, :intialize
+    subject.assert_callback_after @config, :start, :intialize
+  end
 
-      subject.assert_callback_after @config, :start, :intialize
-    end
+  it "refutes a callback exists for one task after another" do
+    subject.refute_callback_after @config, :clone, :nadda
+  end
 
-    it "refutes a callback exists for one task after another" do
-      subject.refute_callback_after @config, :clone, :nadda
-    end
+  it "asserts a task exists" do
+    @config.namespace(:one) { task(:two) {} }
+
+    subject.assert_have_task "one:two", @config
+  end
+
+  it "refute a task exists" do
+    subject.refute_have_task "three:four", @config
   end
 end
 
 describe MiniTest::Expectations do
   before do
-    @config = Object.new
+    @config = Capistrano::Configuration.new
     @config.extend(MiniTest::Capistrano::ConfigurationExtension)
+    @config.task(:startup)          { run "rails server" }
+    @config.task(:announce_startup) { run "echo starting up"}
   end
 
   it "needs to verify a command has run" do
@@ -174,32 +174,31 @@ describe MiniTest::Expectations do
     @config.wont_have_run_anything
   end
 
-  describe "callbacks" do
-    before do
-      @config = Capistrano::Configuration.new
-      @config.extend(MiniTest::Capistrano::ConfigurationExtension)
-      @config.task(:startup)          { run "rails server" }
-      @config.task(:announce_startup) { run "echo starting up"}
-    end
+  it "needs to verify a callback exists for a task before another" do
+    @config.before :stop, :warn_people
 
-    it "needs to verify a callback exists for a task before another" do
-      @config.before :stop, :warn_people
+    @config.must_have_callback_before :stop, :warn_people
+  end
 
-      @config.must_have_callback_before :stop, :warn_people
-    end
+  it "needs to verify no callback exists for a task before another" do
+    @config.wont_have_callback_before :reload, :stop
+  end
 
-    it "needs to verify no callback exists for a task before another" do
-      @config.wont_have_callback_before :reload, :stop
-    end
+  it "needs to verify a callback exists for a task after another" do
+    @config.after :start, :init_database
 
-    it "needs to verify a callback exists for a task after another" do
-      @config.after :start, :init_database
+    @config.must_have_callback_after :start, :init_database
+  end
 
-      @config.must_have_callback_after :start, :init_database
-    end
+  it "needs to verify no callback exists for a task after another" do
+    @config.wont_have_callback_after :stop, :do_taxes
+  end
 
-    it "needs to verify no callback exists for a task after another" do
-      @config.wont_have_callback_after :stop, :do_taxes
-    end
+  it "needs to verify a task exists by name" do
+    @config.must_have_task "startup"
+  end
+
+  it "needs to verify no task exists by name" do
+    @config.wont_have_task "doofus"
   end
 end
