@@ -116,6 +116,15 @@ describe MiniTest::Assertions do
     subject.refute_have_run_something @config
   end
 
+  it "assert a command has been captured" do
+    @config.capture "cat /tmp/surprise.txt"
+    subject.assert_have_captured "cat /tmp/surprise.txt", @config
+  end
+
+  it "refutes a command has been captured" do
+    subject.refute_have_captured "cat /tmp/anything", @config
+  end
+
   it "asserts a callback exists for one task before another" do
     @config.before :startup, :announce_startup
 
@@ -172,6 +181,16 @@ describe MiniTest::Expectations do
 
   it "needs to verify no command has been run" do
     @config.wont_have_run_anything
+  end
+
+  it "needs to verify a command has captured" do
+    @config.capture "yabba dabba"
+    @config.must_have_captured "yabba dabba"
+  end
+
+  it "needs to verify a command has not been captured" do
+    @config.capture "wot?"
+    @config.wont_have_captured "yabba dabba"
   end
 
   it "needs to verify a callback exists for a task before another" do

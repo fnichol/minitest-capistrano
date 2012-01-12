@@ -45,6 +45,24 @@ module MiniTest
     end
 
     ##
+    # Fails unless +configuration+ has captured +cmd+.
+    #
+    #   assert_have_captured "echo hi", configuration
+
+    def assert_have_captured(cmd, configuration, msg = nil)
+      msg ||= "Expected configuration to capture #{cmd}, but did not"
+      refute_nil configuration.captures[cmd], msg
+    end
+
+    ##
+    # Fails if +configuration+ has captured +cmd+.
+
+    def refute_have_captured(cmd, configuration, msg = nil)
+      msg ||= "Expected configuration to not capture #{cmd}, but did"
+      assert_nil configuration.captures[cmd], msg
+    end
+
+    ##
     # Fails unless +configuration+ has a callback of +before_task_name+ before
     # +task_name+.
     #
@@ -162,6 +180,24 @@ module MiniTest
     # :method: wont_have_run_anything
 
     infect_an_assertion :refute_have_run_something, :wont_have_run_anything, true
+
+    ##
+    # See MiniTest::Assertions#assert_have_captured
+    #
+    #    config.must_have_captured cmd
+    #
+    # :method: must_have_captured
+
+    infect_an_assertion :assert_have_captured, :must_have_captured
+
+    ##
+    # See MiniTest::Assertions#refute_have_captured
+    #
+    #    config.wont_have_captured cmd
+    #
+    # :method: wont_have_captured
+
+    infect_an_assertion :refute_have_captured, :wont_have_captured
 
     ##
     # See MiniTest::Assertions#assert_callback_before
