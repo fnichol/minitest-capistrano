@@ -63,6 +63,25 @@ module MiniTest
     end
 
     ##
+    # Fails unless +configuration+ has put +cmd+.
+    #
+    #   assert_have_put "/tmp/thefile", configuration, "thedata"
+
+    def assert_have_put(path, configuration, data, msg = nil)
+      msg ||= "Expected configuration to put #{path} with data, but did not"
+      refute_nil configuration.putes[path], msg
+      assert_equal configuration.putes[path][:data], data, msg
+    end
+
+    ##
+    # Fails if +configuration+ has put +path+.
+
+    def refute_have_put(path, configuration, data = nil, msg = nil)
+      msg ||= "Expected configuration to not put #{path}, but did"
+      assert_nil configuration.putes[path], msg
+    end
+
+    ##
     # Fails unless +configuration+ has a callback of +before_task_name+ before
     # +task_name+.
     #
@@ -200,6 +219,24 @@ module MiniTest
     infect_an_assertion :refute_have_captured, :wont_have_captured
 
     ##
+    # See MiniTest::Assertions#assert_have_put
+    #
+    #    config.must_have_put path, data
+    #
+    # :method: must_have_put
+
+    infect_an_assertion :assert_have_put, :must_have_put
+
+    ##
+    # See MiniTest::Assertions#refute_have_put
+    #
+    #    config.wont_have_put path, data
+    #
+    # :method: wont_have_put
+
+    infect_an_assertion :refute_have_put, :wont_have_put
+
+    ##
     # See MiniTest::Assertions#assert_callback_before
     #
     #   config.must_have_callback_before :stop, :warn_people
@@ -283,6 +320,14 @@ module MiniTest
 
       def uploads
         @uploads ||= {}
+      end
+
+      def put(data, path, options={})
+        putes[path] = {:data => data, :options => options}
+      end
+
+      def putes
+        @putes ||= {}
       end
 
       def capture(command, options={})

@@ -50,6 +50,19 @@ describe MiniTest::Capistrano::ConfigurationExtension do
     end
   end
 
+  describe "#put" do
+    it "starts with an empty hash" do
+      @config.putes.must_be_empty
+    end
+
+    it "adds an entry to the hash when called" do
+      @config.putes.must_be_empty
+      @config.put "data", "path"
+      @config.putes.wont_be_empty
+      @config.putes["path"].wont_be_nil
+    end
+  end
+
   describe "#capture" do
     it "starts with an empty hash" do
       @config.captures.must_be_empty
@@ -125,6 +138,19 @@ describe MiniTest::Assertions do
     subject.refute_have_captured "cat /tmp/anything", @config
   end
 
+  it "assert a file has been put" do
+    @config.put "#!/usr/bin/env ruby", "/tmp/server.rb"
+    subject.assert_have_put "/tmp/server.rb", @config, "#!/usr/bin/env ruby"
+  end
+
+  it "refutes a file has been put with data" do
+    subject.refute_have_put "/tmp/anything", @config, "data"
+  end
+
+  it "refutes a file has been put with no data" do
+    subject.refute_have_put "/tmp/anything", @config
+  end
+
   it "asserts a callback exists for one task before another" do
     @config.before :startup, :announce_startup
 
@@ -191,6 +217,16 @@ describe MiniTest::Expectations do
   it "needs to verify a command has not been captured" do
     @config.capture "wot?"
     @config.wont_have_captured "yabba dabba"
+  end
+
+  it "needs to verify a file has been put" do
+    @config.put "thedata", "thepath"
+    @config.must_have_put "thepath", "thedata"
+  end
+
+  it "needs to verify a file has not been put" do
+    @config.put "yabbadabbadata", "yepperspath"
+    @config.wont_have_put "nopath"
   end
 
   it "needs to verify a callback exists for a task before another" do
