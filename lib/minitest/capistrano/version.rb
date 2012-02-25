@@ -1,5 +1,5 @@
 module MiniTest
   module Capistrano
-    VERSION = "0.0.6" # :nodoc:
+    VERSION = "0.0.7" # :nodoc:
   end
 end
