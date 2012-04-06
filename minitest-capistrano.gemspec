@@ -15,6 +15,6 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = MiniTest::Capistrano::VERSION
 
-  gem.add_dependency "minitest", "~> 2.11.2"
+  gem.add_dependency "minitest", "~> 2.12"
   gem.add_dependency "capistrano", "~> 2.9"
 end
