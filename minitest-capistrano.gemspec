@@ -17,4 +17,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "minitest", "~> 2.12"
   gem.add_dependency "capistrano", "~> 2.9"
+
+  gem.add_development_dependency "minitest-colorize", "~> 0.0.4"
+  gem.add_development_dependency "guard-minitest", "~> 0.5.0"
 end
