@@ -1,4 +1,6 @@
-require "minitest/capistrano"
+require "minitest/assertions"
+require "minitest/expectations"
+require "minitest/capistrano/configuration_extension"
 require "minitest/capistrano/version"
 
 def load_capistrano_recipe(recipe)
