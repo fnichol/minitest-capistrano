@@ -1,5 +1,6 @@
 require File.expand_path(File.join(File.dirname(__FILE__), 'spec_helper'))
 
+
 describe '#load_capistrano_recipe' do
   Capistrano::Configuration.instance = Capistrano::Configuration.new
   load_capistrano_recipe(Capistrano::Recipes::Bark)
