@@ -1,4 +1,11 @@
-## 0.1.1.dev (unreleased)
+## 0.1.2.dev (unreleased)
+
+
+## 0.1.1 (May 28, 2012)
+
+### Bug fixes
+
+* Allow require of 'minitest/capistrano' or 'minitest-capistrano'. ([@fnichol][])
 
 
 ## 0.1.0 (May 28, 2012)
