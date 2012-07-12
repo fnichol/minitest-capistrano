@@ -1,7 +1,6 @@
 gem 'minitest'
 
 require 'minitest/autorun'
-require 'minitest/colorize'
 require 'capistrano'
 
 require 'minitest-capistrano'
