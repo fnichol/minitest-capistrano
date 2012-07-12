@@ -149,7 +149,7 @@ module MiniTest
 
     def test_callback_on(positive, configuration, task_name, on, other_task_name, msg)
       if callbacks = configuration.callbacks[on]
-        callbacks.select!{|c| c.only.include?(task_name.to_s) && c.source == other_task_name}
+        callbacks = callbacks.select {|c| c.only.include?(task_name.to_s) && c.source == other_task_name}
       else
         callbacks = {}
       end
