@@ -148,15 +148,13 @@ module MiniTest
     private
 
     def test_callback_on(positive, configuration, task_name, on, other_task_name, msg)
-      task = configuration.find_task(task_name)
-      callbacks = configuration.find_callback(on, task)
-
-      if callbacks
-        method = positive ? :refute_empty : :assert_empty
-        send method, callbacks.select { |c| c.source == other_task_name }, msg
+      if callbacks = configuration.callbacks[on]
+        callbacks.select!{|c| c.only.include?(task_name.to_s) && c.source == other_task_name}
       else
-        flunk msg
+        callbacks = {}
       end
+      method = positive ? :refute_empty : :assert_empty
+      send method, callbacks.select { |c| c.only.include?(task_name.to_s) && c.source == other_task_name }, msg
     end
   end
 end
