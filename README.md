@@ -20,7 +20,7 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
-## Contributing
+## <a name="development"></a> Development
 
 * Source hosted at [GitHub][repo]
 * Report issues/Questions/Feature requests on [GitHub Issues][issues]
