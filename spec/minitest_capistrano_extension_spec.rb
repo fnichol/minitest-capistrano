@@ -83,6 +83,29 @@ describe MiniTest::Capistrano::ConfigurationExtension do
     end
   end
 
+  describe "#stream" do
+    it "starts with an empty hash" do
+      @config.streams.must_be_empty
+    end
+
+    it "adds an entry to the hash when called" do
+      @config.streams.must_be_empty
+      @config.stream "tail -f /tmp/output"
+      @config.streams.wont_be_empty
+      @config.streams["tail -f /tmp/output"].wont_be_nil
+    end
+
+    it "retuns a nil response if one is not pre-set" do
+      @config.stream("cat /nope").must_be_nil
+    end
+
+    it "returns a response if one is pre-set" do
+      @config.streams_responses["tail -f /tmp/file"] = "blah bleh"
+
+      @config.stream("tail -f /tmp/file").must_equal "blah bleh"
+    end
+  end
+
   describe "#find_callback" do
     it "returns an empty array when no callbacks are found" do
       @config.find_callback(:before, @config.find_task("startup")).must_equal []

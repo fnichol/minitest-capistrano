@@ -60,6 +60,24 @@ module MiniTest
     infect_an_assertion :refute_have_captured, :wont_have_captured
 
     ##
+    # See MiniTest::Assertions#assert_have_streamd
+    #
+    #    config.must_have_streamed cmd
+    #
+    # :method: must_have_streamed
+
+    infect_an_assertion :assert_have_streamed, :must_have_streamed
+
+    ##
+    # See MiniTest::Assertions#refute_have_streamed
+    #
+    #    config.wont_have_streamed cmd
+    #
+    # :method: wont_have_streamed
+
+    infect_an_assertion :refute_have_streamed, :wont_have_streamed
+
+    ##
     # See MiniTest::Assertions#assert_have_put
     #
     #    config.must_have_put path, data

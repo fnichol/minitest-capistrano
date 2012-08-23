@@ -37,6 +37,16 @@ describe MiniTest::Expectations do
     @config.wont_have_captured "yabba dabba"
   end
 
+  it "needs to verify a command has streamed" do
+    @config.stream "boop"
+    @config.must_have_streamed "boop"
+  end
+
+  it "needs to verify a command has not been streamed" do
+    @config.stream "wot?"
+    @config.wont_have_streamed "boop"
+  end
+
   it "needs to verify a file has been put" do
     @config.put "thedata", "thepath"
     @config.must_have_put "thepath", "thedata"

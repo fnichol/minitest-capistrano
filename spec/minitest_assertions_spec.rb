@@ -38,6 +38,15 @@ describe MiniTest::Assertions do
     subject.refute_have_captured "cat /tmp/anything", @config
   end
 
+  it "assert a command has been streamed" do
+    @config.stream "tail -f /tmp/surprise.txt"
+    subject.assert_have_streamed "tail -f /tmp/surprise.txt", @config
+  end
+
+  it "refutes a command has been streamed" do
+    subject.refute_have_streamed "tail -f /tmp/anything", @config
+  end
+
   it "assert a file has been put" do
     @config.put "#!/usr/bin/env ruby", "/tmp/server.rb"
     subject.assert_have_put "/tmp/server.rb", @config, "#!/usr/bin/env ruby"

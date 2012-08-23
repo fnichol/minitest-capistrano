@@ -63,6 +63,24 @@ module MiniTest
     end
 
     ##
+    # Fails unless +configuration+ has streamed +cmd+.
+    #
+    #   assert_have_streamed "tail -f /hi", configuration
+
+    def assert_have_streamed(cmd, configuration, msg = nil)
+      msg ||= "Expected configuration to stream #{cmd}, but did not"
+      refute_nil configuration.streams[cmd], msg
+    end
+
+    ##
+    # Fails if +configuration+ has streamed +cmd+.
+
+    def refute_have_streamed(cmd, configuration, msg = nil)
+      msg ||= "Expected configuration to not stream #{cmd}, but did"
+      assert_nil configuration.streams[cmd], msg
+    end
+
+    ##
     # Fails unless +configuration+ has put +cmd+.
     #
     #   assert_have_put "/tmp/thefile", configuration, "thedata"

@@ -50,6 +50,19 @@ module MiniTest::Capistrano
       @captures_responses ||= {}
     end
 
+    def stream(command, options={})
+      streams[command] = {:options => options}
+      streams_responses[command]
+    end
+
+    def streams
+      @streams ||= {}
+    end
+
+    def streams_responses
+      @streams_responses ||= {}
+    end
+
     def find_callback(on, task)
       task = find_task(task) if task.kind_of?(String)
 
