@@ -1,5 +1,9 @@
 ## 0.1.3.dev (unreleased)
 
+### New features
+
+* Add assertions and expectations for #stream. ([@fnichol][])
+
 
 ## 0.1.2 (July 12, 2012)
 
