@@ -1,14 +1,14 @@
 ## 0.1.4.dev (unreleased)
 
 
-## 0.1.3 (August 23, 2012)
+## 0.1.3 / 2012-08-23
 
 ### New features
 
 * Add assertions and expectations for #stream. ([@fnichol][])
 
 
-## 0.1.2 (July 12, 2012)
+## 0.1.2 / 2012-07-12
 
 ### Bug fixes
 
@@ -21,7 +21,7 @@
 * Track code in Code Climate (badge in README). ([@fnichol][])
 
 
-## 0.1.1 (May 28, 2012)
+## 0.1.1 / 2012-05-28
 
 ### Bug fixes
 
@@ -29,7 +29,7 @@
   ([@fnichol][])
 
 
-## 0.1.0 (May 28, 2012)
+## 0.1.0 / 2012-05-28
 
 ### Improvements
 
