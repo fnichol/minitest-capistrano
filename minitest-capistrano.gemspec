@@ -18,5 +18,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "minitest"
   gem.add_dependency "capistrano", "~> 2.9"
 
+  gem.add_development_dependency "bundler", "~> 1.3"
+  gem.add_development_dependency "rake"
   gem.add_development_dependency "guard-minitest", "~> 0.5.0"
 end
