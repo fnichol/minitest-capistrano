@@ -6,6 +6,11 @@ matrix:
     - rvm: rbx-19mode
     - rvm: rbx-18mode
 
+env:
+  - MINITEST_VERSION=
+  - MINITEST_VERSION=3.5.0
+  - MINITEST_VERSION=2.12.1
+
 rvm:
   - 1.9.3
   - 1.9.2
